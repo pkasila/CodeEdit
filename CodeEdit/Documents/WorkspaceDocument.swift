@@ -12,6 +12,7 @@ import WorkspaceClient
 import Combine
 import CodeFile
 import Search
+import CEExtensionKit
 
 @objc(WorkspaceDocument)
 class WorkspaceDocument: NSDocument, ObservableObject, NSToolbarDelegate {
@@ -23,6 +24,10 @@ class WorkspaceDocument: NSDocument, ObservableObject, NSToolbarDelegate {
     var searchState: SearchState?
     var quickOpenState: QuickOpenState?
     private var cancellables = Set<AnyCancellable>()
+
+    // Extensions
+    lazy var manager = ExtensionWorkspaceConnector(workspace: self)
+    @Published var targets: [Target] = []
 
     deinit {
         cancellables.forEach { $0.cancel() }
@@ -360,5 +365,19 @@ struct WorkspaceSelectionState: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(selectedId, forKey: .selectedId)
         try container.encode(openFileItems, forKey: .openFileItems)
+    }
+}
+
+// MARK: - Extensions
+
+extension WorkspaceDocument {
+    func target(didAdd target: Target) {
+        self.targets.append(target)
+    }
+    func target(didRemove target: Target) {
+        self.targets.removeAll { $0.id == target.id }
+    }
+    func targetDidClear() {
+        self.targets.removeAll()
     }
 }

@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "CEExtensionKit",
+        "repositoryURL": "https://github.com/pkasila/CEExtensionKit",
+        "state": {
+          "branch": "main",
+          "revision": "3cbc9f2a8034230975701b9732a11d8aa53951da",
+          "version": null
+        }
+      },
+      {
         "package": "Highlightr",
         "repositoryURL": "https://github.com/raspu/Highlightr.git",
         "state": {
